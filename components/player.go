@@ -9,7 +9,7 @@ type Player struct {
 func LoadPlayer(width, height, speed float32, color rl.Color) *Player {
 	return &Player{
 		Paddle: Paddle{
-			shape: rl.Rectangle{
+			Shape: rl.Rectangle{
 				X: float32(rl.GetScreenWidth() / 2) - width / 2,
 				Y: 75,
 				Width: width,
@@ -23,10 +23,10 @@ func LoadPlayer(width, height, speed float32, color rl.Color) *Player {
 
 func (p *Player) Move(dt float32) {
 	if rl.IsKeyDown(rl.KeyA) {
-		p.shape.X -= p.speed * dt
+		p.Shape.X -= p.speed * dt
 	}
 
 	if rl.IsKeyDown(rl.KeyD) {
-		p.shape.X += p.speed * dt
+		p.Shape.X += p.speed * dt
 	}
 }

@@ -3,25 +3,28 @@ package components
 import rl "github.com/gen2brain/raylib-go/raylib"
 
 type Ball struct {
-	x int32
-	y int32
-	radius float32
-	speed float32
+	X float32
+	Y float32
+	Radius float32
+	Speed float32
 	color rl.Color
 }
 
 func LoadBall(radius, speed float32, color rl.Color) *Ball {
 	return &Ball{
-		x: int32(rl.GetScreenWidth() / 2),
-		y: int32(rl.GetScreenHeight() / 2),
-		radius: radius,
-		speed: speed,
+		X: float32(rl.GetScreenWidth() / 2),
+		Y: float32(rl.GetScreenHeight() / 2),
+		Radius: radius,
+		Speed: speed,
 		color: color,
 
 	}
 }
 
 func (b *Ball) Draw() {
-	rl.DrawCircle(b.x, b.y, b.radius, b.color)
+	rl.DrawCircle(int32(b.X), int32(b.Y), b.Radius, b.color)
 }
 
+func (b *Ball) Move(dt float32) {
+	b.Y -= b.Speed * dt
+}

@@ -2,6 +2,7 @@ package main
 
 import (
 	"arcade-pong/components"
+	"arcade-pong/systems"
 
 	rl "github.com/gen2brain/raylib-go/raylib"
 )
@@ -23,14 +24,19 @@ func main() {
 		rl.ClearBackground(rl.DarkGray)
 
 		ball.Draw()
+		ball.Move(dt)
 
 		player.Draw()
 		player.Move(dt)
 		player.WallCollision()
 
 		opponent.Draw()
-		opponent.Move(dt)
+		//opponent.Move(dt)
 		opponent.WallCollision()
+
+		if systems.CheckCollision(player.Paddle, *ball) || systems.CheckCollision(opponent.Paddle, *ball) {
+			ball.Speed = -ball.Speed
+		}
 
 		rl.EndDrawing()
 	}
