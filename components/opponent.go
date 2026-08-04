@@ -21,10 +21,14 @@ func LoadOpponent(width, height, speed float32, color rl.Color) *Opponent {
 	}
 }
 
-func (o *Opponent) Move(dt float32) {
-	o.Shape.X += o.speed * dt
-
-	if o.Shape.X <= 0 || o.Shape.X + o.Shape.Width >= float32(rl.GetScreenWidth()) {
-		o.speed = -o.speed
+func (o *Opponent) Move(ballPos, dt float32) {
+	if ballPos >= o.Shape.X + (o.Shape.Width / 2) {
+		o.Shape.X += o.speed * dt
 	}
+
+	if ballPos <= o.Shape.X + (o.Shape.Width / 2) {
+		o.Shape.X -= o.speed * dt
+	}
+
+
 }

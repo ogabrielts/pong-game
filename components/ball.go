@@ -1,12 +1,15 @@
 package components
 
-import rl "github.com/gen2brain/raylib-go/raylib"
+import (
+	rl "github.com/gen2brain/raylib-go/raylib"
+)
 
 type Ball struct {
 	X float32
 	Y float32
 	Radius float32
-	Speed float32
+	BaseSpeed float32
+	Speed rl.Vector2
 	color rl.Color
 }
 
@@ -15,7 +18,11 @@ func LoadBall(radius, speed float32, color rl.Color) *Ball {
 		X: float32(rl.GetScreenWidth() / 2),
 		Y: float32(rl.GetScreenHeight() / 2),
 		Radius: radius,
-		Speed: speed,
+		BaseSpeed: speed,
+		Speed: rl.Vector2{
+			X: 0,
+			Y: speed,
+		},
 		color: color,
 
 	}
@@ -26,5 +33,12 @@ func (b *Ball) Draw() {
 }
 
 func (b *Ball) Move(dt float32) {
-	b.Y -= b.Speed * dt
+	b.Y -= b.Speed.Y * dt
+	b.X += b.Speed.X * dt
+}
+
+func (b *Ball) WallCollision() {
+	if (b.X - b.Radius) <= 0 || (b.X + b.Radius) >= float32(rl.GetScreenWidth()) {
+		b.Speed.X *= -1
+	}
 }

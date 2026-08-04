@@ -25,17 +25,32 @@ func main() {
 
 		ball.Draw()
 		ball.Move(dt)
+		ball.WallCollision()
 
 		player.Draw()
 		player.Move(dt)
 		player.WallCollision()
 
 		opponent.Draw()
-		//opponent.Move(dt)
+		opponent.Move(ball.X, dt)
 		opponent.WallCollision()
 
-		if systems.CheckCollision(player.Paddle, *ball) || systems.CheckCollision(opponent.Paddle, *ball) {
-			ball.Speed = -ball.Speed
+		if systems.CheckCollision(player.Paddle, *ball) {
+			hitOffset := ball.X - (player.Shape.X + player.Shape.Width / 2)
+			normalized := hitOffset / (player.Shape.Width / 2)
+			maxAngle := 0.75
+
+			ball.Speed.X = normalized * float32(maxAngle) * ball.BaseSpeed
+			ball.Speed.Y *= -1
+		}
+
+		if systems.CheckCollision(opponent.Paddle, *ball) {
+			hitOffset := ball.X - (opponent.Shape.X + opponent.Shape.Width / 2)
+			normalized := hitOffset / (opponent.Shape.Width / 2)
+			maxAngle := 0.75
+
+			ball.Speed.X = normalized * float32(maxAngle) * ball.BaseSpeed
+			ball.Speed.Y *= -1
 		}
 
 		rl.EndDrawing()
