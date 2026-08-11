@@ -17,6 +17,7 @@ func LoadPlayer(width, height, speed float32, color rl.Color) *Player {
 			},
 			color: color,
 			speed: speed,
+			Lives: 3,
 		},
 	}
 }

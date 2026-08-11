@@ -1,10 +1,14 @@
 package components
 
-import rl "github.com/gen2brain/raylib-go/raylib"
+import (
+	rl "github.com/gen2brain/raylib-go/raylib"
+)
 
 type Opponent struct {
 	Paddle
 }
+
+const delay float32 = 0.85
 
 func LoadOpponent(width, height, speed float32, color rl.Color) *Opponent {
 	return &Opponent{
@@ -17,18 +21,17 @@ func LoadOpponent(width, height, speed float32, color rl.Color) *Opponent {
 			},
 			color: color,
 			speed: speed,
+			Lives: 3,
 		},
 	}
 }
 
 func (o *Opponent) Move(ballPos, dt float32) {
-	if ballPos >= o.Shape.X + (o.Shape.Width / 2) {
-		o.Shape.X += o.speed * dt
+	paddleCenter := o.Shape.X + (o.Shape.Width / 2)
+
+	if ballPos > paddleCenter {
+		o.Shape.X += o.speed * (dt * delay)
+	} else if ballPos < paddleCenter {
+		o.Shape.X -= o.speed * (dt * delay)
 	}
-
-	if ballPos <= o.Shape.X + (o.Shape.Width / 2) {
-		o.Shape.X -= o.speed * dt
-	}
-
-
 }
