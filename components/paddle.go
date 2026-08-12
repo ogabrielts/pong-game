@@ -10,7 +10,7 @@ type Paddle struct {
 	Shape rl.Rectangle
 	color rl.Color
 	speed float32
-	Lives int
+	Score int
 }
 
 func (p *Paddle) Draw() {
@@ -18,18 +18,18 @@ func (p *Paddle) Draw() {
 }
 
 func (p *Paddle) DrawScore(x, y int32) {
-	rl.DrawText(strconv.Itoa(p.Lives), x, y, 30, rl.White)
+	rl.DrawText(strconv.Itoa(p.Score), x, y, 20, rl.White)
 }
 
 func (p *Paddle) WallCollision() {
-	if p.Shape.X <= 0 {
-		p.Shape.X = 0
+	if p.Shape.Y <= 0 {
+		p.Shape.Y = 0
 	}
-	if p.Shape.X + p.Shape.Width >= float32(rl.GetScreenWidth()) {
-		p.Shape.X = float32(rl.GetScreenWidth()) - p.Shape.Width
+	if p.Shape.Y + p.Shape.Height >= float32(rl.GetScreenHeight()) {
+		p.Shape.Y = float32(rl.GetScreenHeight()) - p.Shape.Height
 	}
 }
 
-func (p *Paddle) RemoveLive() {
-	p.Lives--
+func (p *Paddle) AddScore() {
+	p.Score++
 }

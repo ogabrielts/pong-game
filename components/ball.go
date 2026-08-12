@@ -20,11 +20,10 @@ func LoadBall(radius, speed float32, color rl.Color) *Ball {
 		Radius: radius,
 		Speed: speed,
 		Vel: rl.Vector2{
-			X: 0,
-			Y: speed,
+			X: speed,
+			Y: 0,
 		},
 		color: color,
-
 	}
 }
 
@@ -33,12 +32,12 @@ func (b *Ball) Draw() {
 }
 
 func (b *Ball) Move(dt float32) {
-	b.Y -= b.Vel.Y * dt
-	b.X += b.Vel.X * dt
+	b.Y += b.Vel.Y * dt
+	b.X -= b.Vel.X * dt
 }
 
 func (b *Ball) WallCollision() {
-	if (b.X - b.Radius) <= 0 || (b.X + b.Radius) >= float32(rl.GetScreenWidth()) {
-		b.Vel.X *= -1
+	if (b.Y - b.Radius) <= 0 || (b.Y + b.Radius) >= float32(rl.GetScreenHeight()) {
+		b.Vel.Y *= -1
 	}
 }
