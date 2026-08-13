@@ -1,6 +1,8 @@
 package components
 
 import (
+	"math/rand"
+
 	rl "github.com/gen2brain/raylib-go/raylib"
 )
 
@@ -20,11 +22,26 @@ func LoadBall(radius, speed float32, color rl.Color) *Ball {
 		Radius: radius,
 		Speed: speed,
 		Vel: rl.Vector2{
-			X: speed,
-			Y: 0,
+			X: randomizeX(speed),
+			Y: randomizeY(speed),
 		},
 		color: color,
 	}
+}
+
+func randomizeX(speed float32) float32 {
+	num := rand.Intn(2)
+
+	if num == 0 {
+		return speed
+	} else {
+		return -speed
+	}
+}
+
+func randomizeY(speed float32) float32 {
+	num := rand.Float32()
+	return speed * (num - 0.5)
 }
 
 func (b *Ball) Draw() {
