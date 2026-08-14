@@ -54,7 +54,7 @@ func main() {
 		// Opponent logic
 		opponent.Draw()
 		opponent.DrawScore(int32(rl.GetScreenWidth() / 2) + 20, 20)
-		opponent.Move(ball.Y, dt)
+		opponent.Move(ball.Y, ball.X, dt)
 		opponent.WallCollision()
 
 		// Check ball-paddle collision for opponent
