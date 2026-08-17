@@ -6,18 +6,18 @@ import (
 	rl "github.com/gen2brain/raylib-go/raylib"
 )
 
-func UpdateScore(player *components.Player, opponent *components.Opponent, ball *components.Ball) {
-	if ball.X < 0 {
-		ball.X = float32(rl.GetScreenWidth() / 2) // IMPROVE BALL RESPAWN
-		ball.Y = float32(rl.GetScreenHeight() / 2)
+func UpdateScore(player *components.Player, opponent *components.Opponent, ballX float32) bool {
+	if ballX < 0 {
 		opponent.AddScore()
+		return true
 	}
 	
-	if ball.X > float32(rl.GetScreenWidth()) {
-		ball.X = float32(rl.GetScreenWidth() / 2)
-		ball.Y = float32(rl.GetScreenHeight() / 2)
+	if ballX > float32(rl.GetScreenWidth()) {
 		player.AddScore()
+		return true
 	}
+
+	return false
 }
 
 func EndGame(player, opponent components.Paddle) bool {

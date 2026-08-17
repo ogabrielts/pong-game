@@ -13,7 +13,7 @@ type Paddle struct {
 	Score int
 }
 
-func (p *Paddle) Draw() {
+func (p *Paddle) DrawPaddle() {
 	rl.DrawRectangleRec(p.Shape, p.color)
 }
 

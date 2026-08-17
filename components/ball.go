@@ -13,6 +13,7 @@ type Ball struct {
 	Speed float32
 	Vel rl.Vector2
 	color rl.Color
+	SpawnTimer float32
 }
 
 func LoadBall(radius, speed float32, color rl.Color) *Ball {
@@ -26,6 +27,7 @@ func LoadBall(radius, speed float32, color rl.Color) *Ball {
 			Y: randomizeY(speed),
 		},
 		color: color,
+		SpawnTimer: 2.0,
 	}
 }
 
@@ -49,11 +51,17 @@ func (b *Ball) Draw() {
 }
 
 func (b *Ball) Move(dt float32) {
-	b.Y += b.Vel.Y * dt
-	b.X -= b.Vel.X * dt
+	if b.SpawnTimer > 0 {
+		b.SpawnTimer -= dt
+	} else {
+		b.Y += b.Vel.Y * dt
+		b.X -= b.Vel.X * dt
+	}
+
+	b.wallCollision()
 }
 
-func (b *Ball) WallCollision() {
+func (b *Ball) wallCollision() {
 	if (b.Y - b.Radius) <= 0 || (b.Y + b.Radius) >= float32(rl.GetScreenHeight()) {
 		b.Vel.Y *= -1
 	}

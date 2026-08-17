@@ -22,7 +22,14 @@ func LoadPlayer(width, height, speed float32, color rl.Color) *Player {
 	}
 }
 
+func (p *Player) Draw() {
+	p.DrawPaddle()
+	p.DrawScore(int32(rl.GetScreenWidth() / 2) - 30, 20)
+}
+
 func (p *Player) Move(dt float32) {
+	p.WallCollision()
+
 	if rl.IsKeyDown(rl.KeyW) {
 		p.Shape.Y -= p.speed * dt
 	}

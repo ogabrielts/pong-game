@@ -1,10 +1,17 @@
 package main
 
 import (
-	"arcade-pong/components"
 	"arcade-pong/systems"
 
 	rl "github.com/gen2brain/raylib-go/raylib"
+)
+
+type State int
+
+const (
+	Menu State = iota
+	Play
+	Replay
 )
 
 func main() {
@@ -13,64 +20,49 @@ func main() {
 
 	rl.SetTargetFPS(240)
 
-	// Load player, opponent, and ball
-	player := components.LoadPlayer(5, 100, 250, rl.White)
-	opponent := components.LoadOpponent(5, 100, 250, rl.White)
-	ball := components.LoadBall(4, 400, rl.White)
+	game := systems.NewGame()
+	var state State = 0
+
 
 	for !rl.WindowShouldClose() {
 		dt := rl.GetFrameTime()
 
+
+		switch state {
+		case Menu:
+			if rl.IsKeyDown(rl.KeySpace) {
+				state = 1
+			}
+
+		case Play:
+			game.Update(dt)
+
+		case Replay:
+			if rl.IsKeyDown(rl.KeySpace) {
+				state = 1
+			}
+		}
+
 		rl.BeginDrawing()
 
-		// Background
-		rl.ClearBackground(rl.DarkGray)
-		rl.DrawRectangle(int32((rl.GetScreenWidth()) / 2) - 1, 0, 2, int32(rl.GetScreenHeight()), rl.Gray)
+		switch state {
+		case Menu:
+			rl.ClearBackground(rl.DarkBlue)
+			rl.DrawText("Just Pong", 30, 100, 50, rl.White)
+			rl.DrawText("Press [SPACE] to start", 30, 200, 30, rl.White)
 
-		// Check Score
-		systems.UpdateScore(player, opponent, ball)
+		case Play:
+			game.Draw()
+			if game.End() {
+				state = 2
+			}
 
-		// Ball logic
-		ball.Draw()
-		ball.Move(dt)
-		ball.WallCollision()
+		case Replay:
+			rl.ClearBackground(rl.DarkBlue)
+			rl.DrawText("Game Over", 30, 100, 50, rl.White)
+			rl.DrawText("Press [SPACE] to play again", 30, 200, 30, rl.White)
 
-		// Player logic
-		player.Draw()
-		player.DrawScore(int32(rl.GetScreenWidth() / 2) - 30, 20)
-		player.Move(dt)
-		player.WallCollision()
-
-		// Check ball-paddle collision for player
-		if systems.CheckCollision(player.Paddle, *ball) {
-			hitOffset := ball.Y - (player.Shape.Y + player.Shape.Height / 2)
-			normalized := hitOffset / (player.Shape.Height / 2)
-			maxAngle := 0.75
-
-			ball.Vel.Y = normalized * float32(maxAngle) * ball.Speed
-			ball.Vel.X *= -1
-		}
-
-		// Opponent logic
-		opponent.Draw()
-		opponent.DrawScore(int32(rl.GetScreenWidth() / 2) + 20, 20)
-		opponent.Move(ball.Y, ball.X, dt)
-		opponent.WallCollision()
-
-		// Check ball-paddle collision for opponent
-		if systems.CheckCollision(opponent.Paddle, *ball) {
-			hitOffset := ball.Y - (opponent.Shape.Y + opponent.Shape.Height / 2)
-			normalized := hitOffset / (opponent.Shape.Height / 2)
-			maxAngle := 0.75
-
-			ball.Vel.Y = normalized * float32(maxAngle) * ball.Speed
-			ball.Vel.X *= -1
-		}
-
-
-		// End loop if score == 5
-		if systems.EndGame(player.Paddle, opponent.Paddle) {
-			break
+			game = systems.NewGame()
 		}
 
 		rl.EndDrawing()

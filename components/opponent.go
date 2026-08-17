@@ -27,7 +27,14 @@ func LoadOpponent(width, height, speed float32, color rl.Color) *Opponent {
 	}
 }
 
+func (o *Opponent) Draw() {
+	o.DrawPaddle()
+	o.DrawScore(int32(rl.GetScreenWidth() / 2) + 20, 20)
+}
+
 func (o *Opponent) Move(ballY, ballX, dt float32) {
+	o.WallCollision()
+
 	paddleCenter := o.Shape.Y + (o.Shape.Height / 2)
 	halfscreen := float32(rl.GetScreenWidth() / 2)
 	middle := float32(rl.GetScreenHeight() / 2) - (o.Shape.Height / 2)
