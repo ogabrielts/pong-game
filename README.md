@@ -13,10 +13,8 @@ go run .
 ```
 
 ```
-go  build -o ./pong .
+go  build -o ./pong.exe .
 ```
-
-Play on itch.io.
 
 ### License
 MIT License
